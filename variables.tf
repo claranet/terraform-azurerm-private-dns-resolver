@@ -42,12 +42,12 @@ variable "vnet_cidr" {
 
 variable "inbound_endpoints" {
   description = <<EOD
-List of Inbound Endpoints objects.
+List of Inbound Endpoint objects.
 ```
 name               = Short Inbound Endpoint name, used to generate the Inbound Endpoint resource name.
 cidr               = CIDR of the Inbound Endpoint Subnet.
-custom_name        = Custom Inbound Endpoint name, it overrides the Inbound Endpoint default resource name.
-custom_subnet_name = Custom Subnet name, it overrides the Subnet default resource name.
+custom_name        = Custom Inbound Endpoint name, overrides the Inbound Endpoint default resource name.
+custom_subnet_name = Custom Subnet name, overrides the Subnet default resource name.
 ```
 EOD
   type = list(object({
@@ -73,12 +73,12 @@ EOD
 
 variable "outbound_endpoints" {
   description = <<EOD
-List of Outbound Endpoints objects.
+List of Outbound Endpoint objects.
 ```
 name               = Short Outbound Endpoint name, used to generate the Outbound Endpoint resource name.
 cidr               = CIDR of the Outbound Endpoint Subnet.
-custom_name        = Custom Outbound Endpoint name, it overrides the Outbound Endpoint default resource name.
-custom_subnet_name = Custom Subnet name, it overrides the Subnet default resource name.
+custom_name        = Custom Outbound Endpoint name, overrides the Outbound Endpoint default resource name.
+custom_subnet_name = Custom Subnet name, overrides the Subnet default resource name.
 ```
 EOD
   type = list(object({
@@ -104,17 +104,17 @@ EOD
 
 variable "dns_forwarding_rulesets" {
   description = <<EOD
-List of DNS Forwarding Rulesets objects. The first DNS Forwarding Ruleset in the list is the default one, the VNet of the Private DNS Resolver is linked to it.
+List of DNS Forwarding Ruleset objects. The first DNS Forwarding Ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.
 ```
 name                      = Short DNS Forwarding Ruleset name, used to generate the DNS Forwarding Ruleset resource name.
-custom_name               = Custom DNS Forwarding Ruleset name, it overrides the DNS Forwarding Ruleset default resource name.
+custom_name               = Custom DNS Forwarding Ruleset name, overrides the DNS Forwarding Ruleset default resource name.
 target_outbound_endpoints = List of Outbound Endpoints to link to the DNS Forwarding Ruleset. Can be the short name of the Outbound Endpoint or an Oubound Endpoint ID.
 vnets_ids                 = List of VNets IDs to link to the DNS Forwarding Ruleset.
-rules                     = List of Forwarding Rules objects that the DNS Forwarding Ruleset contains.
+rules                     = List of Forwarding Rule objects that the DNS Forwarding Ruleset contains.
   name            = Short Forwarding Rule name, used to generate the Forwarding Rule resource name.
   domain_name     = Specifies the target domain name of the Forwarding Rule. 
   dns_servers_ips = List of target DNS servers IPs for the specified domain name.
-  custom_name     = Custom Forwarding Rule name, it overrides the Forwarding Rule default resource name.
+  custom_name     = Custom Forwarding Rule name, overrides the Forwarding Rule default resource name.
   enabled         = Whether the Forwarding Rule is enabled or not. Default to `true`.
 ```
 EOD

@@ -1,0 +1,4 @@
+azure_region="eu-west"
+client_name="demo"
+environment="dev"
+stack="test"

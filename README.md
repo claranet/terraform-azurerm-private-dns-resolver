@@ -17,6 +17,13 @@ This Terraform module creates an [Azure Private DNS Resolver](https://learn.micr
 | >= 2.x.x       | 0.12.x            | < 2.0           |
 | <  2.x.x       | 0.11.x            | < 2.0           |
 
+## Contributing
+
+If you want to contribute to this repository, feel free to use our [pre-commit](https://pre-commit.com/) git hook configuration
+which will help you automatically update and format some files for you by enforcing our Terraform code module best-practices.
+
+More details are available in the [CONTRIBUTING.md](./CONTRIBUTING.md#pull-request-process) file.
+
 ## Usage
 
 This module is optimized to work with the [Claranet terraform-wrapper](https://github.com/claranet/terraform-wrapper) tool
@@ -135,7 +142,7 @@ module "private_dns_resolver" {
   ]
 
   dns_forwarding_rulesets = [
-    # VNets cannot be linked to multiple Forwarding Ruleset     
+    # VNets cannot be linked to multiple Forwarding Ruleset
     # Therefore, keep in mind that the first Ruleset is the default one because the VNet of the Private DNS Resolver is linked to this Ruleset
     {
       name        = "foo"
@@ -227,7 +234,7 @@ module "private_dns_resolver" {
 | custom\_private\_dns\_resolver\_name | Custom Private DNS Resolver name, generated if not set. | `string` | `""` | no |
 | custom\_vnet\_name | Custom VNet name, generated if not set. | `string` | `""` | no |
 | default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
-| dns\_forwarding\_rulesets | List of DNS Forwarding Ruleset objects. The first DNS Forwarding Ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.<pre>name                      = Short DNS Forwarding Ruleset name, used to generate the DNS Forwarding Ruleset resource name.<br>custom_name               = Custom DNS Forwarding Ruleset name, overrides the DNS Forwarding Ruleset default resource name.<br>target_outbound_endpoints = List of Outbound Endpoints to link to the DNS Forwarding Ruleset. Can be the short name of the Outbound Endpoint or an Oubound Endpoint ID.<br>vnets_ids                 = List of VNets IDs to link to the DNS Forwarding Ruleset.<br>rules                     = List of Forwarding Rule objects that the DNS Forwarding Ruleset contains.<br>  name            = Short Forwarding Rule name, used to generate the Forwarding Rule resource name.<br>  domain_name     = Specifies the target domain name of the Forwarding Rule. <br>  dns_servers_ips = List of target DNS servers IPs for the specified domain name.<br>  custom_name     = Custom Forwarding Rule name, overrides the Forwarding Rule default resource name.<br>  enabled         = Whether the Forwarding Rule is enabled or not. Default to `true`.</pre> | <pre>list(object({<br>    name                      = string<br>    custom_name               = optional(string)<br>    target_outbound_endpoints = optional(list(string), [])<br>    vnets_ids                 = optional(list(string), [])<br>    rules = optional(list(object({<br>      name            = string<br>      domain_name     = string<br>      dns_servers_ips = list(string)<br>      custom_name     = optional(string)<br>      enabled         = optional(bool, true)<br>    })), [])<br>  }))</pre> | `[]` | no |
+| dns\_forwarding\_rulesets | List of DNS Forwarding Ruleset objects. The first DNS Forwarding Ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.<pre>name                      = Short DNS Forwarding Ruleset name, used to generate the DNS Forwarding Ruleset resource name.<br>custom_name               = Custom DNS Forwarding Ruleset name, overrides the DNS Forwarding Ruleset default resource name.<br>target_outbound_endpoints = List of Outbound Endpoints to link to the DNS Forwarding Ruleset. Can be the short name of the Outbound Endpoint or an Oubound Endpoint ID.<br>vnets_ids                 = List of VNets IDs to link to the DNS Forwarding Ruleset.<br>rules                     = List of Forwarding Rule objects that the DNS Forwarding Ruleset contains.<br>  name            = Short Forwarding Rule name, used to generate the Forwarding Rule resource name.<br>  domain_name     = Specifies the target domain name of the Forwarding Rule.<br>  dns_servers_ips = List of target DNS servers IPs for the specified domain name.<br>  custom_name     = Custom Forwarding Rule name, overrides the Forwarding Rule default resource name.<br>  enabled         = Whether the Forwarding Rule is enabled or not. Default to `true`.</pre> | <pre>list(object({<br>    name                      = string<br>    custom_name               = optional(string)<br>    target_outbound_endpoints = optional(list(string), [])<br>    vnets_ids                 = optional(list(string), [])<br>    rules = optional(list(object({<br>      name            = string<br>      domain_name     = string<br>      dns_servers_ips = list(string)<br>      custom_name     = optional(string)<br>      enabled         = optional(bool, true)<br>    })), [])<br>  }))</pre> | `[]` | no |
 | environment | Project environment. | `string` | n/a | yes |
 | extra\_tags | Extra tags to add. | `map(string)` | `{}` | no |
 | inbound\_endpoints | List of Inbound Endpoint objects.<pre>name               = Short Inbound Endpoint name, used to generate the Inbound Endpoint resource name.<br>cidr               = CIDR of the Inbound Endpoint Subnet.<br>custom_name        = Custom Inbound Endpoint name, overrides the Inbound Endpoint default resource name.<br>custom_subnet_name = Custom Subnet name, overrides the Subnet default resource name.</pre> | <pre>list(object({<br>    name               = string<br>    cidr               = string<br>    custom_name        = optional(string)<br>    custom_subnet_name = optional(string)<br>  }))</pre> | `[]` | no |

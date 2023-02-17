@@ -109,7 +109,7 @@ module "private_dns_resolver" {
   ]
 
   dns_forwarding_rulesets = [
-    # VNets cannot be linked to multiple Forwarding Ruleset     
+    # VNets cannot be linked to multiple Forwarding Ruleset
     # Therefore, keep in mind that the first Ruleset is the default one because the VNet of the Private DNS Resolver is linked to this Ruleset
     {
       name        = "foo"

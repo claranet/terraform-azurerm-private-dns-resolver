@@ -25,7 +25,7 @@ module "vnet" {
 
 module "subnets" {
   source  = "claranet/subnet/azurerm"
-  version = "6.1.0"
+  version = "6.3.0"
 
   for_each = local.endpoints
 

@@ -1,3 +1,13 @@
+## 7.1.0 (2024-10-03)
+
+### Features
+
+* use Claranet "azurecaf" provider 77c7d3e
+
+### Miscellaneous Chores
+
+* **deps:** update dependency claranet/subnet/azurerm to v7.2.0 193ef7f
+
 ## 7.0.1 (2024-10-01)
 
 ### Documentation

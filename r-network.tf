@@ -1,6 +1,6 @@
 module "vnet" {
   source  = "claranet/vnet/azurerm"
-  version = "7.0.0"
+  version = "7.1.0"
 
   count = var.vnet_id == "" ? 1 : 0
 

@@ -1,56 +1,3 @@
-module "azure_region" {
-  source  = "claranet/regions/azurerm"
-  version = "x.x.x"
-
-  azure_region = var.azure_region
-}
-
-module "rg" {
-  source  = "claranet/rg/azurerm"
-  version = "x.x.x"
-
-  location    = module.azure_region.location
-  client_name = var.client_name
-  environment = var.environment
-  stack       = var.stack
-}
-
-module "my_vnet" {
-  source  = "claranet/vnet/azurerm"
-  version = "x.x.x"
-
-  client_name    = var.client_name
-  environment    = var.environment
-  location       = module.azure_region.location
-  location_short = module.azure_region.location_short
-  stack          = var.stack
-
-  resource_group_name = module.rg.resource_group_name
-
-  custom_vnet_name = "my-vnet"
-
-  vnet_cidr = [local.my_vnet_cidr]
-}
-
-module "vnets_to_be_linked" {
-  source  = "claranet/vnet/azurerm"
-  version = "x.x.x"
-
-  count = length(local.vnets_cidrs_to_be_linked)
-
-  client_name    = var.client_name
-  environment    = var.environment
-  location       = module.azure_region.location
-  location_short = module.azure_region.location_short
-  stack          = var.stack
-
-  resource_group_name = module.rg.resource_group_name
-
-  name_suffix = format("%02s", count.index + 1)
-
-  vnet_cidr = [element(local.vnets_cidrs_to_be_linked, count.index)]
-}
-
 locals {
   my_vnet_cidr = "10.0.34.0/25"
   # my_subnets_cidrs = cidrsubnets(local.my_vnet_cidr, 2, 2, 2, 2)
@@ -61,21 +8,57 @@ locals {
   private_dns_resolver_subnets_cidrs = cidrsubnets(local.private_dns_resolver_vnet_cidr, 2, 2, 2, 2)
 }
 
+module "my_vnet" {
+  source  = "claranet/vnet/azurerm"
+  version = "x.x.x"
+
+  location       = module.azure_region.location
+  location_short = module.azure_region.location_short
+  client_name    = var.client_name
+  environment    = var.environment
+  stack          = var.stack
+
+  resource_group_name = module.rg.name
+
+  custom_name = "my-vnet"
+
+  cidrs = [local.my_vnet_cidr]
+}
+
+module "vnets_to_be_linked" {
+  source  = "claranet/vnet/azurerm"
+  version = "x.x.x"
+
+  count = length(local.vnets_cidrs_to_be_linked)
+
+  location       = module.azure_region.location
+  location_short = module.azure_region.location_short
+  client_name    = var.client_name
+  environment    = var.environment
+  stack          = var.stack
+
+  resource_group_name = module.rg.name
+
+  name_suffix = format("%02s", count.index + 1)
+
+  cidrs = [element(local.vnets_cidrs_to_be_linked, count.index)]
+}
+
 module "private_dns_resolver" {
   source  = "claranet/private-dns-resolver/azurerm"
   version = "x.x.x"
 
-  client_name    = var.client_name
-  environment    = var.environment
   location       = module.azure_region.location
   location_short = module.azure_region.location_short
+  client_name    = var.client_name
+  environment    = var.environment
   stack          = var.stack
 
-  resource_group_name = module.rg.resource_group_name
+  resource_group_name = module.rg.name
 
   ## Bring Your Own VNet
   # If set, `vnet_cidr` will not be used
-  # vnet_id = module.my_vnet.virtual_network_id
+  # vnet_id = module.my_vnet.id
 
   vnet_cidr = local.private_dns_resolver_vnet_cidr
 
@@ -118,7 +101,7 @@ module "private_dns_resolver" {
       # Ref to the first Outbound Endpoint
       target_outbound_endpoints = ["foo"]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].virtual_network_id, 0, 4)
+      vnets_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
 
       rules = [
         {
@@ -144,7 +127,7 @@ module "private_dns_resolver" {
         # "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resourceGroup1/providers/Microsoft.Network/dnsResolvers/dnsResolver1/outboundEndpoints/outboundEndpoint1",
       ]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].virtual_network_id, 4, 8)
+      vnets_ids = slice(module.vnets_to_be_linked[*].id, 4, 8)
 
       rules = [
         {

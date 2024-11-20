@@ -35,59 +35,6 @@ More details about variables set by the `terraform-wrapper` available in the [do
 [Hashicorp Terraform](https://github.com/hashicorp/terraform/). Instead, we recommend to use [OpenTofu](https://github.com/opentofu/opentofu/).
 
 ```hcl
-module "azure_region" {
-  source  = "claranet/regions/azurerm"
-  version = "x.x.x"
-
-  azure_region = var.azure_region
-}
-
-module "rg" {
-  source  = "claranet/rg/azurerm"
-  version = "x.x.x"
-
-  location    = module.azure_region.location
-  client_name = var.client_name
-  environment = var.environment
-  stack       = var.stack
-}
-
-module "my_vnet" {
-  source  = "claranet/vnet/azurerm"
-  version = "x.x.x"
-
-  client_name    = var.client_name
-  environment    = var.environment
-  location       = module.azure_region.location
-  location_short = module.azure_region.location_short
-  stack          = var.stack
-
-  resource_group_name = module.rg.resource_group_name
-
-  custom_vnet_name = "my-vnet"
-
-  vnet_cidr = [local.my_vnet_cidr]
-}
-
-module "vnets_to_be_linked" {
-  source  = "claranet/vnet/azurerm"
-  version = "x.x.x"
-
-  count = length(local.vnets_cidrs_to_be_linked)
-
-  client_name    = var.client_name
-  environment    = var.environment
-  location       = module.azure_region.location
-  location_short = module.azure_region.location_short
-  stack          = var.stack
-
-  resource_group_name = module.rg.resource_group_name
-
-  name_suffix = format("%02s", count.index + 1)
-
-  vnet_cidr = [element(local.vnets_cidrs_to_be_linked, count.index)]
-}
-
 locals {
   my_vnet_cidr = "10.0.34.0/25"
   # my_subnets_cidrs = cidrsubnets(local.my_vnet_cidr, 2, 2, 2, 2)
@@ -98,21 +45,57 @@ locals {
   private_dns_resolver_subnets_cidrs = cidrsubnets(local.private_dns_resolver_vnet_cidr, 2, 2, 2, 2)
 }
 
+module "my_vnet" {
+  source  = "claranet/vnet/azurerm"
+  version = "x.x.x"
+
+  location       = module.azure_region.location
+  location_short = module.azure_region.location_short
+  client_name    = var.client_name
+  environment    = var.environment
+  stack          = var.stack
+
+  resource_group_name = module.rg.name
+
+  custom_name = "my-vnet"
+
+  cidrs = [local.my_vnet_cidr]
+}
+
+module "vnets_to_be_linked" {
+  source  = "claranet/vnet/azurerm"
+  version = "x.x.x"
+
+  count = length(local.vnets_cidrs_to_be_linked)
+
+  location       = module.azure_region.location
+  location_short = module.azure_region.location_short
+  client_name    = var.client_name
+  environment    = var.environment
+  stack          = var.stack
+
+  resource_group_name = module.rg.name
+
+  name_suffix = format("%02s", count.index + 1)
+
+  cidrs = [element(local.vnets_cidrs_to_be_linked, count.index)]
+}
+
 module "private_dns_resolver" {
   source  = "claranet/private-dns-resolver/azurerm"
   version = "x.x.x"
 
-  client_name    = var.client_name
-  environment    = var.environment
   location       = module.azure_region.location
   location_short = module.azure_region.location_short
+  client_name    = var.client_name
+  environment    = var.environment
   stack          = var.stack
 
-  resource_group_name = module.rg.resource_group_name
+  resource_group_name = module.rg.name
 
   ## Bring Your Own VNet
   # If set, `vnet_cidr` will not be used
-  # vnet_id = module.my_vnet.virtual_network_id
+  # vnet_id = module.my_vnet.id
 
   vnet_cidr = local.private_dns_resolver_vnet_cidr
 
@@ -155,7 +138,7 @@ module "private_dns_resolver" {
       # Ref to the first Outbound Endpoint
       target_outbound_endpoints = ["foo"]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].virtual_network_id, 0, 4)
+      vnets_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
 
       rules = [
         {
@@ -181,7 +164,7 @@ module "private_dns_resolver" {
         # "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resourceGroup1/providers/Microsoft.Network/dnsResolvers/dnsResolver1/outboundEndpoints/outboundEndpoint1",
       ]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].virtual_network_id, 4, 8)
+      vnets_ids = slice(module.vnets_to_be_linked[*].id, 4, 8)
 
       rules = [
         {
@@ -204,26 +187,26 @@ module "private_dns_resolver" {
 
 | Name | Version |
 |------|---------|
-| azurecaf | ~> 1.2, >= 1.2.22 |
-| azurerm | ~> 3.107 |
+| azurecaf | ~> 1.2.28 |
+| azurerm | ~> 4.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| subnets | claranet/subnet/azurerm | 7.2.0 |
-| vnet | claranet/vnet/azurerm | 7.1.0 |
+| subnets | claranet/subnet/azurerm | ~> 8.0.0 |
+| vnet | claranet/vnet/azurerm | ~> 8.0.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [azurerm_private_dns_resolver.private_dns_resolver](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) | resource |
-| [azurerm_private_dns_resolver_dns_forwarding_ruleset.dns_forwarding_rulesets](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) | resource |
-| [azurerm_private_dns_resolver_forwarding_rule.forwarding_rules](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) | resource |
-| [azurerm_private_dns_resolver_inbound_endpoint.inbound_endpoints](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) | resource |
-| [azurerm_private_dns_resolver_outbound_endpoint.outbound_endpoints](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) | resource |
-| [azurerm_private_dns_resolver_virtual_network_link.vnet_links](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_virtual_network_link) | resource |
+| [azurerm_private_dns_resolver.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) | resource |
+| [azurerm_private_dns_resolver_dns_forwarding_ruleset.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) | resource |
+| [azurerm_private_dns_resolver_forwarding_rule.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) | resource |
+| [azurerm_private_dns_resolver_inbound_endpoint.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) | resource |
+| [azurerm_private_dns_resolver_outbound_endpoint.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) | resource |
+| [azurerm_private_dns_resolver_virtual_network_link.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_virtual_network_link) | resource |
 | [azurecaf_name.dns_forwarding_rulesets](https://registry.terraform.io/providers/claranet/azurecaf/latest/docs/data-sources/name) | data source |
 | [azurecaf_name.forwarding_rules](https://registry.terraform.io/providers/claranet/azurecaf/latest/docs/data-sources/name) | data source |
 | [azurecaf_name.inbound_endpoints](https://registry.terraform.io/providers/claranet/azurecaf/latest/docs/data-sources/name) | data source |
@@ -235,7 +218,7 @@ module "private_dns_resolver" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
-| custom\_private\_dns\_resolver\_name | Custom Private DNS Resolver name, generated if not set. | `string` | `""` | no |
+| custom\_name | Custom Private DNS Resolver name, generated if not set. | `string` | `""` | no |
 | custom\_vnet\_name | Custom VNet name, generated if not set. | `string` | `""` | no |
 | default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
 | dns\_forwarding\_rulesets | List of DNS Forwarding Ruleset objects. The first DNS Forwarding Ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.<pre>name                      = Short DNS Forwarding Ruleset name, used to generate the DNS Forwarding Ruleset resource name.<br/>custom_name               = Custom DNS Forwarding Ruleset name, overrides the DNS Forwarding Ruleset default resource name.<br/>target_outbound_endpoints = List of Outbound Endpoints to link to the DNS Forwarding Ruleset. Can be the short name of the Outbound Endpoint or an Oubound Endpoint ID.<br/>vnets_ids                 = List of VNets IDs to link to the DNS Forwarding Ruleset.<br/>rules                     = List of Forwarding Rule objects that the DNS Forwarding Ruleset contains.<br/>  name            = Short Forwarding Rule name, used to generate the Forwarding Rule resource name.<br/>  domain_name     = Specifies the target domain name of the Forwarding Rule.<br/>  dns_servers_ips = List of target DNS servers IPs for the specified domain name.<br/>  custom_name     = Custom Forwarding Rule name, overrides the Forwarding Rule default resource name.<br/>  enabled         = Whether the Forwarding Rule is enabled or not. Default to `true`.</pre> | <pre>list(object({<br/>    name                      = string<br/>    custom_name               = optional(string)<br/>    target_outbound_endpoints = optional(list(string), [])<br/>    vnets_ids                 = optional(list(string), [])<br/>    rules = optional(list(object({<br/>      name            = string<br/>      domain_name     = string<br/>      dns_servers_ips = list(string)<br/>      custom_name     = optional(string)<br/>      enabled         = optional(bool, true)<br/>    })), [])<br/>  }))</pre> | `[]` | no |
@@ -249,7 +232,6 @@ module "private_dns_resolver" {
 | outbound\_endpoints | List of Outbound Endpoint objects.<pre>name               = Short Outbound Endpoint name, used to generate the Outbound Endpoint resource name.<br/>cidr               = CIDR of the Outbound Endpoint Subnet.<br/>custom_name        = Custom Outbound Endpoint name, overrides the Outbound Endpoint default resource name.<br/>custom_subnet_name = Custom Subnet name, overrides the Subnet default resource name.</pre> | <pre>list(object({<br/>    name               = string<br/>    cidr               = string<br/>    custom_name        = optional(string)<br/>    custom_subnet_name = optional(string)<br/>  }))</pre> | `[]` | no |
 | resource\_group\_name | Resource Group name. | `string` | n/a | yes |
 | stack | Project stack name. | `string` | n/a | yes |
-| use\_caf\_naming | Use the Azure CAF naming provider to generate default resource name. Custom names override this if set. Legacy default names is used if this is set to `false`. | `bool` | `true` | no |
 | vnet\_cidr | CIDR of the VNet to create for the Private DNS Resolver. One of `vnet_id` or `vnet_cidr` must be specified. | `string` | `""` | no |
 | vnet\_id | ID of the existing VNet in which the Private DNS Resolver will be created. One of `vnet_id` or `vnet_cidr` must be specified. | `string` | `""` | no |
 
@@ -257,10 +239,21 @@ module "private_dns_resolver" {
 
 | Name | Description |
 |------|-------------|
-| dns\_forwarding\_rulesets | Maps of Private DNS Resolver DNS Forwarding Rulesets outputs. |
-| inbound\_endpoints | Maps of Private DNS Resolver Inbound Endpoints outputs. |
-| outbound\_endpoints | Maps of Private DNS Resolver Outbound Endpoints outputs. |
-| private\_dns\_resolver | Private DNS Resolver outputs. |
+| dns\_forwarding\_rulesets | Maps of Private DNS Resolver DNS Forwarding Rulesets. |
+| id | Private DNS Resolver ID. |
+| inbound\_endpoints | Maps of Private DNS Resolver Inbound Endpoints. |
+| module\_subnets | Subnets module outputs. |
+| module\_vnet | Virtual Network module outputs. |
+| name | Private DNS Resolver name. |
+| outbound\_endpoints | Maps of Private DNS Resolver Outbound Endpoints. |
+| resource | Private DNS Resolver resource object. |
+| resource\_dns\_forwarding\_ruleset | Private DNS Resolver DNS Forwarding Ruleset resource object. |
+| resource\_forwarding\_rule | Private DNS Resolver Forwarding Rule resource object. |
+| resource\_inbound\_endpoint | Private DNS Resolver Inbound Endpoint resource object. |
+| resource\_outbound\_endpoint | Private DNS Resolver Outbound Endpoint resource object. |
+| resource\_virtual\_network\_link | Private DNS Resolver Virtual Network Link resource object. |
+| vnet\_id | Private DNS Resolver Virtual Network ID. |
+| vnet\_name | Private DNS Resolver Virtual Network name. |
 <!-- END_TF_DOCS -->
 
 ## Related documentation

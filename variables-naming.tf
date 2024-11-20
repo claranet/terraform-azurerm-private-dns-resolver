@@ -11,21 +11,15 @@ variable "name_suffix" {
   default     = ""
 }
 
-variable "use_caf_naming" {
-  description = "Use the Azure CAF naming provider to generate default resource name. Custom names override this if set. Legacy default names is used if this is set to `false`."
-  type        = bool
-  default     = true
-}
-
 # Custom naming override
-variable "custom_vnet_name" {
-  description = "Custom VNet name, generated if not set."
+variable "custom_name" {
+  description = "Custom Private DNS Resolver name, generated if not set."
   type        = string
   default     = ""
 }
 
-variable "custom_private_dns_resolver_name" {
-  description = "Custom Private DNS Resolver name, generated if not set."
+variable "custom_vnet_name" {
+  description = "Custom VNet name, generated if not set."
   type        = string
   default     = ""
 }

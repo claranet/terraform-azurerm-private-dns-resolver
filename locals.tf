@@ -8,12 +8,12 @@ locals {
 
   vnet_id = one(compact(concat(
     [var.vnet_id],
-    module.vnet[*].virtual_network_id,
+    module.vnet[*].id,
   )))
 
   vnet_name = one(compact(concat(
     [element(reverse(split("/", var.vnet_id)), 0)],
-    module.vnet[*].virtual_network_name,
+    module.vnet[*].name,
   )))
 
   vnet_links_flattened = flatten([

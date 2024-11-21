@@ -73,6 +73,7 @@ module "private_dns_resolver" {
       custom_name = "inbound-endpoint"
       cidr        = local.private_dns_resolver_subnets_cidrs[1]
       # cidr      = local.my_subnets_cidrs[1]
+      default_outbound_access_enabled = true
     },
   ]
 

@@ -47,4 +47,6 @@ module "subnets" {
   private_link_endpoint_enabled = false
 
   cidrs = [each.value.cidr]
+
+  default_outbound_access_enabled = each.value.default_outbound_access_enabled
 }

@@ -18,7 +18,7 @@ variable "custom_name" {
   default     = ""
 }
 
-variable "custom_vnet_name" {
+variable "vnet_custom_name" {
   description = "Custom VNet name, generated if not set."
   type        = string
   default     = ""

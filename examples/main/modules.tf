@@ -86,20 +86,20 @@ module "private_dns_resolver" {
     },
     {
       name               = "bar"
-      custom_subnet_name = "bar-outbound-endpoint-subnet"
+      subnet_custom_name = "bar-outbound-endpoint-subnet"
       cidr               = local.private_dns_resolver_subnets_cidrs[3]
       # cidr             = local.my_subnets_cidrs[3]
     },
   ]
 
   dns_forwarding_rulesets = [
-    # VNets cannot be linked to multiple Forwarding Ruleset
-    # Therefore, keep in mind that the first Ruleset is the default one because the VNet of the Private DNS Resolver is linked to this Ruleset
+    # VNets cannot be linked to multiple forwarding ruleset
+    # Therefore, keep in mind that the first ruleset is the default one because the VNet of the Private DNS Resolver is linked to this ruleset
     {
       name        = "foo"
       custom_name = "forwarding-ruleset"
 
-      # Ref to the first Outbound Endpoint
+      # Ref to the first outbound endpoint
       target_outbound_endpoints = ["foo"]
 
       vnets_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
@@ -120,8 +120,8 @@ module "private_dns_resolver" {
     {
       name = "bar"
 
-      # Ref to all Outbound Endpoints
-      # Can be an Oubound Endpoint ID, in case you want to use this DNS Forwarding Ruleset with an existing Outbound Endpoint
+      # Ref to all outbound endpoints
+      # Can be an outbound endpoint ID, in case you want to use this DNS forwarding ruleset with an existing outbound endpoint
       target_outbound_endpoints = [
         "foo",
         "bar",

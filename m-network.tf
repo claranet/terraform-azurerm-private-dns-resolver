@@ -14,7 +14,7 @@ module "vnet" {
 
   name_prefix = local.name_prefix
   name_suffix = local.name_suffix
-  custom_name = var.custom_vnet_name
+  custom_name = var.vnet_custom_name
 
   cidrs = [var.vnet_cidr]
 
@@ -37,8 +37,8 @@ module "subnets" {
   resource_group_name = var.resource_group_name
 
   name_prefix = local.name_prefix
-  name_suffix = each.value.custom_subnet_name != "" ? local.name_suffix != "" ? format("%s-%s", local.name_suffix, each.key) : each.key : ""
-  custom_name = each.value.custom_subnet_name
+  name_suffix = each.value.subnet_custom_name != "" ? local.name_suffix != "" ? format("%s-%s", local.name_suffix, each.key) : each.key : ""
+  custom_name = each.value.subnet_custom_name
 
   virtual_network_name = local.vnet_name
   delegations          = local.subnets_delegation

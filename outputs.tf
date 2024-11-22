@@ -4,22 +4,22 @@ output "resource" {
 }
 
 output "resource_inbound_endpoint" {
-  description = "Private DNS Resolver Inbound Endpoint resource object."
+  description = "Private DNS Resolver inbound endpoint resource object."
   value       = azurerm_private_dns_resolver_inbound_endpoint.main
 }
 
 output "resource_outbound_endpoint" {
-  description = "Private DNS Resolver Outbound Endpoint resource object."
+  description = "Private DNS Resolver outbound endpoint resource object."
   value       = azurerm_private_dns_resolver_outbound_endpoint.main
 }
 
 output "resource_dns_forwarding_ruleset" {
-  description = "Private DNS Resolver DNS Forwarding Ruleset resource object."
+  description = "Private DNS Resolver DNS forwarding ruleset resource object."
   value       = azurerm_private_dns_resolver_dns_forwarding_ruleset.main
 }
 
 output "resource_forwarding_rule" {
-  description = "Private DNS Resolver Forwarding Rule resource object."
+  description = "Private DNS Resolver forwarding rule resource object."
   value       = azurerm_private_dns_resolver_forwarding_rule.main
 }
 
@@ -48,27 +48,27 @@ output "name" {
   value       = azurerm_private_dns_resolver.main.name
 }
 
-output "vnet_id" {
+output "virtual_network_id" {
   description = "Private DNS Resolver Virtual Network ID."
   value       = local.vnet_id
 }
 
-output "vnet_name" {
+output "virtual_network_name" {
   description = "Private DNS Resolver Virtual Network name."
   value       = local.vnet_name
 }
 
 output "inbound_endpoints" {
-  description = "Maps of Private DNS Resolver Inbound Endpoints."
+  description = "Maps of Private DNS Resolver inbound endpoints."
   value       = local.inbound_endpoints_output
 }
 
 output "outbound_endpoints" {
-  description = "Maps of Private DNS Resolver Outbound Endpoints."
+  description = "Maps of Private DNS Resolver outbound endpoints."
   value       = local.outbound_endpoints_output
 }
 
 output "dns_forwarding_rulesets" {
-  description = "Maps of Private DNS Resolver DNS Forwarding Rulesets."
+  description = "Maps of Private DNS Resolver DNS forwarding rulesets."
   value       = local.dns_forwarding_rulesets_output
 }

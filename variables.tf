@@ -42,12 +42,12 @@ variable "vnet_cidr" {
 
 variable "inbound_endpoints" {
   description = <<EOD
-List of Inbound Endpoint objects.
+List of inbound endpoint objects.
 ```
-name                            = Short Inbound Endpoint name, used to generate the Inbound Endpoint resource name.
-cidr                            = CIDR of the Inbound Endpoint Subnet.
-custom_name                     = Custom Inbound Endpoint name, overrides the Inbound Endpoint default resource name.
-custom_subnet_name              = Custom Subnet name, overrides the Subnet default resource name.
+name                            = Short inbound endpoint name, used to generate the inbound endpoint resource name.
+cidr                            = CIDR of the inbound endpoint Subnet.
+custom_name                     = Custom inbound endpoint name, overrides the inbound endpoint default resource name.
+subnet_custom_name              = Custom Subnet name, overrides the Subnet default resource name.
 default_outbound_access_enabled	= Enable or disable default outbound access in Azure. See [documentation](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).
 ```
 EOD
@@ -55,13 +55,13 @@ EOD
     name                            = string
     cidr                            = string
     custom_name                     = optional(string)
-    custom_subnet_name              = optional(string)
+    subnet_custom_name              = optional(string)
     default_outbound_access_enabled = optional(bool, false)
   }))
   default = []
   validation {
     condition     = length(var.inbound_endpoints) <= 2
-    error_message = "Inbound Endpoints are limited to 2 per Private DNS Resolver."
+    error_message = "Inbound endpoints are limited to 2 per Private DNS Resolver."
   }
   validation {
     condition     = alltrue([for endpoint in var.inbound_endpoints : !contains([for r in range(1, 17) : format("10.0.%s", r)], replace(cidrsubnet(endpoint.cidr, 0, 0), "/(.+)\\.[0-9]{1,3}\\/[1-9]{1,2}/", "$1"))])
@@ -75,12 +75,12 @@ EOD
 
 variable "outbound_endpoints" {
   description = <<EOD
-List of Outbound Endpoint objects.
+List of outbound endpoint objects.
 ```
-name                            = Short Outbound Endpoint name, used to generate the Outbound Endpoint resource name.
-cidr                            = CIDR of the Outbound Endpoint Subnet.
-custom_name                     = Custom Outbound Endpoint name, overrides the Outbound Endpoint default resource name.
-custom_subnet_name              = Custom Subnet name, overrides the Subnet default resource name.
+name                            = Short outbound endpoint name, used to generate the outbound endpoint resource name.
+cidr                            = CIDR of the outbound endpoint Subnet.
+custom_name                     = Custom outbound endpoint name, overrides the outbound endpoint default resource name.
+subnet_custom_name              = Custom Subnet name, overrides the Subnet default resource name.
 default_outbound_access_enabled	= Enable or disable default outbound access in Azure. See [documentation](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).
 ```
 EOD
@@ -88,13 +88,13 @@ EOD
     name                            = string
     cidr                            = string
     custom_name                     = optional(string)
-    custom_subnet_name              = optional(string)
+    subnet_custom_name              = optional(string)
     default_outbound_access_enabled = optional(bool, false)
   }))
   default = []
   validation {
     condition     = length(var.outbound_endpoints) <= 2
-    error_message = "Outbound Endpoints are limited to 2 per Private DNS Resolver."
+    error_message = "Outbound endpoints are limited to 2 per Private DNS Resolver."
   }
   validation {
     condition     = alltrue([for endpoint in var.outbound_endpoints : !contains([for r in range(1, 17) : format("10.0.%s", r)], replace(cidrsubnet(endpoint.cidr, 0, 0), "/(.+)\\.[0-9]{1,3}\\/[1-9]{1,2}/", "$1"))])
@@ -108,18 +108,18 @@ EOD
 
 variable "dns_forwarding_rulesets" {
   description = <<EOD
-List of DNS Forwarding Ruleset objects. The first DNS Forwarding Ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.
+List of DNS forwarding ruleset objects. The first DNS forwarding ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.
 ```
-name                      = Short DNS Forwarding Ruleset name, used to generate the DNS Forwarding Ruleset resource name.
-custom_name               = Custom DNS Forwarding Ruleset name, overrides the DNS Forwarding Ruleset default resource name.
-target_outbound_endpoints = List of Outbound Endpoints to link to the DNS Forwarding Ruleset. Can be the short name of the Outbound Endpoint or an Oubound Endpoint ID.
-vnets_ids                 = List of VNets IDs to link to the DNS Forwarding Ruleset.
-rules                     = List of Forwarding Rule objects that the DNS Forwarding Ruleset contains.
-  name            = Short Forwarding Rule name, used to generate the Forwarding Rule resource name.
-  domain_name     = Specifies the target domain name of the Forwarding Rule.
+name                      = Short DNS forwarding ruleset name, used to generate the DNS forwarding ruleset resource name.
+custom_name               = Custom DNS forwarding ruleset name, overrides the DNS forwarding ruleset default resource name.
+target_outbound_endpoints = List of outbound endpoints to link to the DNS forwarding ruleset. Can be the short name of the outbound endpoint or an outbound endpoint ID.
+vnets_ids                 = List of VNets IDs to link to the DNS forwarding ruleset.
+rules                     = List of forwarding rule objects that the DNS forwarding ruleset contains.
+  name            = Short forwarding rule name, used to generate the forwarding rule resource name.
+  domain_name     = Specifies the target domain name of the forwarding rule.
   dns_servers_ips = List of target DNS servers IPs for the specified domain name.
-  custom_name     = Custom Forwarding Rule name, overrides the Forwarding Rule default resource name.
-  enabled         = Whether the Forwarding Rule is enabled or not. Default to `true`.
+  custom_name     = Custom forwarding rule name, overrides the forwarding rule default resource name.
+  enabled         = Whether the forwarding rule is enabled or not. Default to `true`.
 ```
 EOD
   type = list(object({
@@ -138,15 +138,15 @@ EOD
   default = []
   validation {
     condition     = alltrue([for ruleset in var.dns_forwarding_rulesets : length(ruleset.rules) <= 25])
-    error_message = "Forwarding Rules are limited to 25 per DNS Forwarding Ruleset."
+    error_message = "Forwarding rules are limited to 25 per DNS forwarding ruleset."
   }
   validation {
     condition     = alltrue([for ruleset in var.dns_forwarding_rulesets : length(ruleset.vnets_ids) <= 10])
-    error_message = "VNet Links are limited to 10 per DNS Forwarding Ruleset."
+    error_message = "VNet links are limited to 10 per DNS forwarding ruleset."
   }
   validation {
     condition     = alltrue([for ruleset in var.dns_forwarding_rulesets : length(ruleset.target_outbound_endpoints) <= 2])
-    error_message = "Outbound Endpoints are limited to 2 per DNS Forwarding Ruleset."
+    error_message = "Outbound endpoints are limited to 2 per DNS forwarding ruleset."
   }
   validation {
     condition = alltrue(flatten([
@@ -154,6 +154,6 @@ EOD
         for rule in ruleset.rules : length(rule.dns_servers_ips) <= 6
       ]
     ]))
-    error_message = "Target DNS Servers are limited to 6 per Forwarding Rule."
+    error_message = "Target DNS Servers are limited to 6 per forwarding rule."
   }
 }

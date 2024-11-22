@@ -44,17 +44,19 @@ variable "inbound_endpoints" {
   description = <<EOD
 List of Inbound Endpoint objects.
 ```
-name               = Short Inbound Endpoint name, used to generate the Inbound Endpoint resource name.
-cidr               = CIDR of the Inbound Endpoint Subnet.
-custom_name        = Custom Inbound Endpoint name, overrides the Inbound Endpoint default resource name.
-custom_subnet_name = Custom Subnet name, overrides the Subnet default resource name.
+name                            = Short Inbound Endpoint name, used to generate the Inbound Endpoint resource name.
+cidr                            = CIDR of the Inbound Endpoint Subnet.
+custom_name                     = Custom Inbound Endpoint name, overrides the Inbound Endpoint default resource name.
+custom_subnet_name              = Custom Subnet name, overrides the Subnet default resource name.
+default_outbound_access_enabled	= Enable or disable default outbound access in Azure. See [documentation](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).
 ```
 EOD
   type = list(object({
-    name               = string
-    cidr               = string
-    custom_name        = optional(string)
-    custom_subnet_name = optional(string)
+    name                            = string
+    cidr                            = string
+    custom_name                     = optional(string)
+    custom_subnet_name              = optional(string)
+    default_outbound_access_enabled = optional(bool, false)
   }))
   default = []
   validation {
@@ -75,17 +77,19 @@ variable "outbound_endpoints" {
   description = <<EOD
 List of Outbound Endpoint objects.
 ```
-name               = Short Outbound Endpoint name, used to generate the Outbound Endpoint resource name.
-cidr               = CIDR of the Outbound Endpoint Subnet.
-custom_name        = Custom Outbound Endpoint name, overrides the Outbound Endpoint default resource name.
-custom_subnet_name = Custom Subnet name, overrides the Subnet default resource name.
+name                            = Short Outbound Endpoint name, used to generate the Outbound Endpoint resource name.
+cidr                            = CIDR of the Outbound Endpoint Subnet.
+custom_name                     = Custom Outbound Endpoint name, overrides the Outbound Endpoint default resource name.
+custom_subnet_name              = Custom Subnet name, overrides the Subnet default resource name.
+default_outbound_access_enabled	= Enable or disable default outbound access in Azure. See [documentation](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).
 ```
 EOD
   type = list(object({
-    name               = string
-    cidr               = string
-    custom_name        = optional(string)
-    custom_subnet_name = optional(string)
+    name                            = string
+    cidr                            = string
+    custom_name                     = optional(string)
+    custom_subnet_name              = optional(string)
+    default_outbound_access_enabled = optional(bool, false)
   }))
   default = []
   validation {

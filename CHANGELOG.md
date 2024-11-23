@@ -1,3 +1,32 @@
+## 8.0.0 (2024-11-23)
+
+### ⚠ BREAKING CHANGES
+
+* **AZ-1088:** module v8 structure and updates
+
+### Features
+
+* **AZ-1088:** apply suggestions 6a9dfe1
+* **AZ-1088:** module v8 structure and updates 9d856f4
+
+### Miscellaneous Chores
+
+* **deps:** update dependency claranet/vnet/azurerm to v7.1.0 f64b5e1
+* **deps:** update dependency opentofu to v1.8.3 16838ec
+* **deps:** update dependency opentofu to v1.8.4 ea2ba07
+* **deps:** update dependency opentofu to v1.8.6 3bfa991
+* **deps:** update dependency pre-commit to v4 b8a7d64
+* **deps:** update dependency pre-commit to v4.0.1 014521e
+* **deps:** update dependency tflint to v0.54.0 3d64dad
+* **deps:** update dependency trivy to v0.56.1 b2b3c6a
+* **deps:** update dependency trivy to v0.56.2 b60d261
+* **deps:** update dependency trivy to v0.57.1 05bc7c0
+* **deps:** update pre-commit hook pre-commit/pre-commit-hooks to v5 a2a933d
+* **deps:** update pre-commit hook tofuutils/pre-commit-opentofu to v2.1.0 1bcde36
+* **deps:** update tools 619f971
+* prepare for new examples structure 0391246
+* update examples structure 49aa0dd
+
 ## 7.1.0 (2024-10-03)
 
 ### Features

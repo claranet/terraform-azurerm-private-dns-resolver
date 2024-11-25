@@ -6,22 +6,22 @@ locals {
 
   endpoints = merge(local.inbound_endpoints, local.outbound_endpoints)
 
-  vnet_id = one(compact(concat(
-    [var.vnet_id],
+  virtual_network_id = one(compact(concat(
+    [var.virtual_network_id],
     module.vnet[*].id,
   )))
 
-  vnet_name = one(compact(concat(
-    [element(reverse(split("/", var.vnet_id)), 0)],
+  virtual_network_name = one(compact(concat(
+    [element(reverse(split("/", var.virtual_network_id)), 0)],
     module.vnet[*].name,
   )))
 
-  vnet_links_flattened = flatten([
+  virtual_network_links_flattened = flatten([
     for index, ruleset in var.dns_forwarding_rulesets : [
-      for id in concat(index == 0 ? [local.vnet_id] : [], ruleset.vnets_ids) : {
-        name         = format("%s-link", element(reverse(split("/", id)), 0))
-        vnet_id      = id
-        ruleset_name = ruleset.name
+      for id in concat(index == 0 ? [local.virtual_network_id] : [], ruleset.virtual_networks_ids) : {
+        name               = format("%s-link", element(reverse(split("/", id)), 0))
+        virtual_network_id = id
+        ruleset_name       = ruleset.name
       }
     ]
   ])

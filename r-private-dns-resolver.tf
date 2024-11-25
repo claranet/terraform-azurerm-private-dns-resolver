@@ -4,7 +4,7 @@ resource "azurerm_private_dns_resolver" "main" {
 
   resource_group_name = var.resource_group_name
 
-  virtual_network_id = local.vnet_id
+  virtual_network_id = local.virtual_network_id
 
   tags = merge(local.default_tags, var.extra_tags)
 }
@@ -99,12 +99,12 @@ moved {
 }
 
 resource "azurerm_private_dns_resolver_virtual_network_link" "main" {
-  count = length(local.vnet_links_flattened)
+  count = length(local.virtual_network_links_flattened)
 
-  name = local.vnet_links_flattened[count.index].name
+  name = local.virtual_network_links_flattened[count.index].name
 
-  dns_forwarding_ruleset_id = azurerm_private_dns_resolver_dns_forwarding_ruleset.main[local.vnet_links_flattened[count.index].ruleset_name].id
-  virtual_network_id        = local.vnet_links_flattened[count.index].vnet_id
+  dns_forwarding_ruleset_id = azurerm_private_dns_resolver_dns_forwarding_ruleset.main[local.virtual_network_links_flattened[count.index].ruleset_name].id
+  virtual_network_id        = local.virtual_network_links_flattened[count.index].virtual_network_id
 }
 
 moved {

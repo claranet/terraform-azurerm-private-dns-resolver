@@ -18,8 +18,8 @@ variable "custom_name" {
   default     = ""
 }
 
-variable "custom_vnet_name" {
-  description = "Custom VNet name, generated if not set."
+variable "virtual_network_custom_name" {
+  description = "Custom Virtual Network name, generated if not set."
   type        = string
   default     = ""
 }

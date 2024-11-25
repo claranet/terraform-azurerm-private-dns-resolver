@@ -1,3 +1,10 @@
+## 8.1.0 (2024-11-25)
+
+### Features
+
+* **AZ-1088:** apply suggestions 5866a8b
+* **AZ-1088:** apply suggestions 04be372
+
 ## 8.0.0 (2024-11-23)
 
 ### ⚠ BREAKING CHANGES

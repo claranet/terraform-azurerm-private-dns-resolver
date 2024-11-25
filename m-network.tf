@@ -2,7 +2,7 @@ module "vnet" {
   source  = "claranet/vnet/azurerm"
   version = "~> 8.0.0"
 
-  count = var.vnet_id == "" ? 1 : 0
+  count = var.virtual_network_id == "" ? 1 : 0
 
   location       = var.location
   location_short = var.location_short
@@ -14,9 +14,9 @@ module "vnet" {
 
   name_prefix = local.name_prefix
   name_suffix = local.name_suffix
-  custom_name = var.vnet_custom_name
+  custom_name = var.virtual_network_custom_name
 
-  cidrs = [var.vnet_cidr]
+  cidrs = [var.virtual_network_cidr]
 
   default_tags_enabled = var.default_tags_enabled
 
@@ -40,7 +40,7 @@ module "subnets" {
   name_suffix = each.value.subnet_custom_name != "" ? local.name_suffix != "" ? format("%s-%s", local.name_suffix, each.key) : each.key : ""
   custom_name = each.value.subnet_custom_name
 
-  virtual_network_name = local.vnet_name
+  virtual_network_name = local.virtual_network_name
   delegations          = local.subnets_delegation
 
   private_link_service_enabled  = true

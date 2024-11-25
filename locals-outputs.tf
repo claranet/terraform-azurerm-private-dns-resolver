@@ -20,10 +20,10 @@ locals {
 
   dns_forwarding_rulesets_output = {
     for ruleset_name in keys(local.dns_forwarding_rulesets) : ruleset_name => {
-      id             = azurerm_private_dns_resolver_dns_forwarding_ruleset.main[ruleset_name].id
-      name           = azurerm_private_dns_resolver_dns_forwarding_ruleset.main[ruleset_name].name
-      rules_ids      = [for rule in local.forwarding_rules : azurerm_private_dns_resolver_forwarding_rule.main[rule.name].id if rule.ruleset_name == ruleset_name]
-      vnet_links_ids = [for index, link in local.vnet_links_flattened : azurerm_private_dns_resolver_virtual_network_link.main[index].id if link.ruleset_name == ruleset_name]
+      id                        = azurerm_private_dns_resolver_dns_forwarding_ruleset.main[ruleset_name].id
+      name                      = azurerm_private_dns_resolver_dns_forwarding_ruleset.main[ruleset_name].name
+      rules_ids                 = [for rule in local.forwarding_rules : azurerm_private_dns_resolver_forwarding_rule.main[rule.name].id if rule.ruleset_name == ruleset_name]
+      virtual_network_links_ids = [for index, link in local.virtual_network_links_flattened : azurerm_private_dns_resolver_virtual_network_link.main[index].id if link.ruleset_name == ruleset_name]
     }
   }
 }

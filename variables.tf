@@ -28,14 +28,14 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "vnet_id" {
-  description = "ID of the existing VNet in which the Private DNS Resolver will be created. One of `vnet_id` or `vnet_cidr` must be specified."
+variable "virtual_network_id" {
+  description = "ID of the existing Virtual Network in which the Private DNS Resolver will be created. One of `virtual_network_id` or `virtual_network_cidr` must be specified."
   type        = string
   default     = ""
 }
 
-variable "vnet_cidr" {
-  description = "CIDR of the VNet to create for the Private DNS Resolver. One of `vnet_id` or `vnet_cidr` must be specified."
+variable "virtual_network_cidr" {
+  description = "CIDR of the Virtual Network to create for the Private DNS Resolver. One of `virtual_network_id` or `virtual_network_cidr` must be specified."
   type        = string
   default     = ""
 }
@@ -108,12 +108,12 @@ EOD
 
 variable "dns_forwarding_rulesets" {
   description = <<EOD
-List of DNS forwarding ruleset objects. The first DNS forwarding ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.
+List of DNS forwarding ruleset objects. The first DNS forwarding ruleset in the list is the default one because the Virtual Network of the Private DNS Resolver is linked to it.
 ```
 name                      = Short DNS forwarding ruleset name, used to generate the DNS forwarding ruleset resource name.
 custom_name               = Custom DNS forwarding ruleset name, overrides the DNS forwarding ruleset default resource name.
 target_outbound_endpoints = List of outbound endpoints to link to the DNS forwarding ruleset. Can be the short name of the outbound endpoint or an outbound endpoint ID.
-vnets_ids                 = List of VNets IDs to link to the DNS forwarding ruleset.
+virtual_networks_ids      = List of Virtual Networks IDs to link to the DNS forwarding ruleset.
 rules                     = List of forwarding rule objects that the DNS forwarding ruleset contains.
   name            = Short forwarding rule name, used to generate the forwarding rule resource name.
   domain_name     = Specifies the target domain name of the forwarding rule.
@@ -126,7 +126,7 @@ EOD
     name                      = string
     custom_name               = optional(string)
     target_outbound_endpoints = optional(list(string), [])
-    vnets_ids                 = optional(list(string), [])
+    virtual_networks_ids      = optional(list(string), [])
     rules = optional(list(object({
       name            = string
       domain_name     = string
@@ -141,8 +141,8 @@ EOD
     error_message = "Forwarding rules are limited to 25 per DNS forwarding ruleset."
   }
   validation {
-    condition     = alltrue([for ruleset in var.dns_forwarding_rulesets : length(ruleset.vnets_ids) <= 10])
-    error_message = "VNet links are limited to 10 per DNS forwarding ruleset."
+    condition     = alltrue([for ruleset in var.dns_forwarding_rulesets : length(ruleset.virtual_networks_ids) <= 10])
+    error_message = "Virtual Network links are limited to 10 per DNS forwarding ruleset."
   }
   validation {
     condition     = alltrue([for ruleset in var.dns_forwarding_rulesets : length(ruleset.target_outbound_endpoints) <= 2])

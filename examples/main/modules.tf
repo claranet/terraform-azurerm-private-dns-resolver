@@ -57,10 +57,10 @@ module "private_dns_resolver" {
   resource_group_name = module.rg.name
 
   ## Bring Your Own VNet
-  # If set, `vnet_cidr` will not be used
-  # vnet_id = module.my_vnet.id
+  # If set, `virtual_network_id` will not be used
+  # virtual_network_id = module.my_vnet.id
 
-  vnet_cidr = local.private_dns_resolver_vnet_cidr
+  virtual_network_cidr = local.private_dns_resolver_vnet_cidr
 
   inbound_endpoints = [
     {
@@ -93,8 +93,8 @@ module "private_dns_resolver" {
   ]
 
   dns_forwarding_rulesets = [
-    # VNets cannot be linked to multiple forwarding ruleset
-    # Therefore, keep in mind that the first ruleset is the default one because the VNet of the Private DNS Resolver is linked to this ruleset
+    # Virtual Networks cannot be linked to multiple forwarding ruleset
+    # Therefore, keep in mind that the first ruleset is the default one because the Virtual Network of the Private DNS Resolver is linked to this ruleset
     {
       name        = "foo"
       custom_name = "forwarding-ruleset"
@@ -102,7 +102,7 @@ module "private_dns_resolver" {
       # Ref to the first outbound endpoint
       target_outbound_endpoints = ["foo"]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
+      virtual_networks_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
 
       rules = [
         {
@@ -128,7 +128,7 @@ module "private_dns_resolver" {
         # "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resourceGroup1/providers/Microsoft.Network/dnsResolvers/dnsResolver1/outboundEndpoints/outboundEndpoint1",
       ]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].id, 4, 8)
+      virtual_networks_ids = slice(module.vnets_to_be_linked[*].id, 4, 8)
 
       rules = [
         {

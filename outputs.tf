@@ -28,7 +28,7 @@ output "resource_virtual_network_link" {
   value       = azurerm_private_dns_resolver_virtual_network_link.main
 }
 
-output "module_vnet" {
+output "module_virtual_network" {
   description = "Virtual Network module outputs."
   value       = module.vnet
 }
@@ -50,12 +50,12 @@ output "name" {
 
 output "virtual_network_id" {
   description = "Private DNS Resolver Virtual Network ID."
-  value       = local.vnet_id
+  value       = local.virtual_network_id
 }
 
 output "virtual_network_name" {
   description = "Private DNS Resolver Virtual Network name."
-  value       = local.vnet_name
+  value       = local.virtual_network_name
 }
 
 output "inbound_endpoints" {

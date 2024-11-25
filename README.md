@@ -94,10 +94,10 @@ module "private_dns_resolver" {
   resource_group_name = module.rg.name
 
   ## Bring Your Own VNet
-  # If set, `vnet_cidr` will not be used
-  # vnet_id = module.my_vnet.id
+  # If set, `virtual_network_id` will not be used
+  # virtual_network_id = module.my_vnet.id
 
-  vnet_cidr = local.private_dns_resolver_vnet_cidr
+  virtual_network_cidr = local.private_dns_resolver_vnet_cidr
 
   inbound_endpoints = [
     {
@@ -130,8 +130,8 @@ module "private_dns_resolver" {
   ]
 
   dns_forwarding_rulesets = [
-    # VNets cannot be linked to multiple forwarding ruleset
-    # Therefore, keep in mind that the first ruleset is the default one because the VNet of the Private DNS Resolver is linked to this ruleset
+    # Virtual Networks cannot be linked to multiple forwarding ruleset
+    # Therefore, keep in mind that the first ruleset is the default one because the Virtual Network of the Private DNS Resolver is linked to this ruleset
     {
       name        = "foo"
       custom_name = "forwarding-ruleset"
@@ -139,7 +139,7 @@ module "private_dns_resolver" {
       # Ref to the first outbound endpoint
       target_outbound_endpoints = ["foo"]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
+      virtual_networks_ids = slice(module.vnets_to_be_linked[*].id, 0, 4)
 
       rules = [
         {
@@ -165,7 +165,7 @@ module "private_dns_resolver" {
         # "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/resourceGroup1/providers/Microsoft.Network/dnsResolvers/dnsResolver1/outboundEndpoints/outboundEndpoint1",
       ]
 
-      vnets_ids = slice(module.vnets_to_be_linked[*].id, 4, 8)
+      virtual_networks_ids = slice(module.vnets_to_be_linked[*].id, 4, 8)
 
       rules = [
         {
@@ -221,7 +221,7 @@ module "private_dns_resolver" {
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
 | custom\_name | Custom Private DNS Resolver name, generated if not set. | `string` | `""` | no |
 | default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
-| dns\_forwarding\_rulesets | List of DNS forwarding ruleset objects. The first DNS forwarding ruleset in the list is the default one because the VNet of the Private DNS Resolver is linked to it.<pre>name                      = Short DNS forwarding ruleset name, used to generate the DNS forwarding ruleset resource name.<br/>custom_name               = Custom DNS forwarding ruleset name, overrides the DNS forwarding ruleset default resource name.<br/>target_outbound_endpoints = List of outbound endpoints to link to the DNS forwarding ruleset. Can be the short name of the outbound endpoint or an outbound endpoint ID.<br/>vnets_ids                 = List of VNets IDs to link to the DNS forwarding ruleset.<br/>rules                     = List of forwarding rule objects that the DNS forwarding ruleset contains.<br/>  name            = Short forwarding rule name, used to generate the forwarding rule resource name.<br/>  domain_name     = Specifies the target domain name of the forwarding rule.<br/>  dns_servers_ips = List of target DNS servers IPs for the specified domain name.<br/>  custom_name     = Custom forwarding rule name, overrides the forwarding rule default resource name.<br/>  enabled         = Whether the forwarding rule is enabled or not. Default to `true`.</pre> | <pre>list(object({<br/>    name                      = string<br/>    custom_name               = optional(string)<br/>    target_outbound_endpoints = optional(list(string), [])<br/>    vnets_ids                 = optional(list(string), [])<br/>    rules = optional(list(object({<br/>      name            = string<br/>      domain_name     = string<br/>      dns_servers_ips = list(string)<br/>      custom_name     = optional(string)<br/>      enabled         = optional(bool, true)<br/>    })), [])<br/>  }))</pre> | `[]` | no |
+| dns\_forwarding\_rulesets | List of DNS forwarding ruleset objects. The first DNS forwarding ruleset in the list is the default one because the Virtual Network of the Private DNS Resolver is linked to it.<pre>name                      = Short DNS forwarding ruleset name, used to generate the DNS forwarding ruleset resource name.<br/>custom_name               = Custom DNS forwarding ruleset name, overrides the DNS forwarding ruleset default resource name.<br/>target_outbound_endpoints = List of outbound endpoints to link to the DNS forwarding ruleset. Can be the short name of the outbound endpoint or an outbound endpoint ID.<br/>virtual_networks_ids      = List of Virtual Networks IDs to link to the DNS forwarding ruleset.<br/>rules                     = List of forwarding rule objects that the DNS forwarding ruleset contains.<br/>  name            = Short forwarding rule name, used to generate the forwarding rule resource name.<br/>  domain_name     = Specifies the target domain name of the forwarding rule.<br/>  dns_servers_ips = List of target DNS servers IPs for the specified domain name.<br/>  custom_name     = Custom forwarding rule name, overrides the forwarding rule default resource name.<br/>  enabled         = Whether the forwarding rule is enabled or not. Default to `true`.</pre> | <pre>list(object({<br/>    name                      = string<br/>    custom_name               = optional(string)<br/>    target_outbound_endpoints = optional(list(string), [])<br/>    virtual_networks_ids      = optional(list(string), [])<br/>    rules = optional(list(object({<br/>      name            = string<br/>      domain_name     = string<br/>      dns_servers_ips = list(string)<br/>      custom_name     = optional(string)<br/>      enabled         = optional(bool, true)<br/>    })), [])<br/>  }))</pre> | `[]` | no |
 | environment | Project environment. | `string` | n/a | yes |
 | extra\_tags | Extra tags to add. | `map(string)` | `{}` | no |
 | inbound\_endpoints | List of inbound endpoint objects.<pre>name                            = Short inbound endpoint name, used to generate the inbound endpoint resource name.<br/>cidr                            = CIDR of the inbound endpoint Subnet.<br/>custom_name                     = Custom inbound endpoint name, overrides the inbound endpoint default resource name.<br/>subnet_custom_name              = Custom Subnet name, overrides the Subnet default resource name.<br/>default_outbound_access_enabled	= Enable or disable default outbound access in Azure. See [documentation](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).</pre> | <pre>list(object({<br/>    name                            = string<br/>    cidr                            = string<br/>    custom_name                     = optional(string)<br/>    subnet_custom_name              = optional(string)<br/>    default_outbound_access_enabled = optional(bool, false)<br/>  }))</pre> | `[]` | no |
@@ -232,9 +232,9 @@ module "private_dns_resolver" {
 | outbound\_endpoints | List of outbound endpoint objects.<pre>name                            = Short outbound endpoint name, used to generate the outbound endpoint resource name.<br/>cidr                            = CIDR of the outbound endpoint Subnet.<br/>custom_name                     = Custom outbound endpoint name, overrides the outbound endpoint default resource name.<br/>subnet_custom_name              = Custom Subnet name, overrides the Subnet default resource name.<br/>default_outbound_access_enabled	= Enable or disable default outbound access in Azure. See [documentation](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access).</pre> | <pre>list(object({<br/>    name                            = string<br/>    cidr                            = string<br/>    custom_name                     = optional(string)<br/>    subnet_custom_name              = optional(string)<br/>    default_outbound_access_enabled = optional(bool, false)<br/>  }))</pre> | `[]` | no |
 | resource\_group\_name | Resource Group name. | `string` | n/a | yes |
 | stack | Project stack name. | `string` | n/a | yes |
-| vnet\_cidr | CIDR of the VNet to create for the Private DNS Resolver. One of `vnet_id` or `vnet_cidr` must be specified. | `string` | `""` | no |
-| vnet\_custom\_name | Custom VNet name, generated if not set. | `string` | `""` | no |
-| vnet\_id | ID of the existing VNet in which the Private DNS Resolver will be created. One of `vnet_id` or `vnet_cidr` must be specified. | `string` | `""` | no |
+| virtual\_network\_cidr | CIDR of the Virtual Network to create for the Private DNS Resolver. One of `virtual_network_id` or `virtual_network_cidr` must be specified. | `string` | `""` | no |
+| virtual\_network\_custom\_name | Custom Virtual Network name, generated if not set. | `string` | `""` | no |
+| virtual\_network\_id | ID of the existing Virtual Network in which the Private DNS Resolver will be created. One of `virtual_network_id` or `virtual_network_cidr` must be specified. | `string` | `""` | no |
 
 ## Outputs
 
@@ -244,7 +244,7 @@ module "private_dns_resolver" {
 | id | Private DNS Resolver ID. |
 | inbound\_endpoints | Maps of Private DNS Resolver inbound endpoints. |
 | module\_subnets | Subnets module outputs. |
-| module\_vnet | Virtual Network module outputs. |
+| module\_virtual\_network | Virtual Network module outputs. |
 | name | Private DNS Resolver name. |
 | outbound\_endpoints | Maps of Private DNS Resolver outbound endpoints. |
 | resource | Private DNS Resolver resource object. |

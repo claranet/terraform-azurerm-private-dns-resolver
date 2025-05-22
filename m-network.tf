@@ -34,7 +34,7 @@ module "subnets" {
   environment    = var.environment
   stack          = var.stack
 
-  resource_group_name = var.resource_group_name
+  resource_group_name = coalesce(local.subnet_custom_rg, var.resource_group_name)
 
   name_prefix = local.name_prefix
   name_suffix = each.value.subnet_custom_name != "" ? local.name_suffix != "" ? format("%s-%s", local.name_suffix, each.key) : each.key : ""

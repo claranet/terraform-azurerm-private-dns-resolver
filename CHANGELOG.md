@@ -1,3 +1,38 @@
+## 8.2.0 (2025-05-23)
+
+### Features
+
+* **AZ-1560:** ✨ add custom resource group name for subnet 1180ae9
+
+### Miscellaneous Chores
+
+* **AZ-1560:** apply suggestions 6fa3608
+* **deps:** update dependency opentofu to v1.8.8 16bdf60
+* **deps:** update dependency opentofu to v1.9.0 33fe941
+* **deps:** update dependency opentofu to v1.9.1 a3092f1
+* **deps:** update dependency pre-commit to v4.1.0 147f12d
+* **deps:** update dependency pre-commit to v4.2.0 ac93f61
+* **deps:** update dependency terraform-docs to v0.20.0 69c3d84
+* **deps:** update dependency tflint to v0.55.0 c27e8af
+* **deps:** update dependency tflint to v0.57.0 42cb1f6
+* **deps:** update dependency trivy to v0.58.1 312a2d7
+* **deps:** update dependency trivy to v0.58.2 3b591ac
+* **deps:** update dependency trivy to v0.59.1 582da64
+* **deps:** update dependency trivy to v0.60.0 ccb23ea
+* **deps:** update dependency trivy to v0.61.1 43efbbd
+* **deps:** update dependency trivy to v0.62.0 b85559a
+* **deps:** update dependency trivy to v0.62.1 30516d6
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.19.0 0d5204a
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.20.0 fa45db4
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.21.0 f641788
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.22.0 c988c3b
+* **deps:** update pre-commit hook tofuutils/pre-commit-opentofu to v2.2.0 38098fa
+* **deps:** update tools 85c90c9
+* **deps:** update tools a39e4c4
+* **deps:** update tools 7fc6d9c
+* update Github templates e06bb95
+* update tflint config for v0.55.0 839979f
+
 ## 8.1.0 (2024-11-25)
 
 ### Features

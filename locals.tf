@@ -47,5 +47,5 @@ locals {
     ]
   }
 
-  subnet_custom_rg = try(provider::azurerm::parse_resource_id(var.virtual_network_id).resource_group_name, "")
+  vnet_rg = try(provider::azurerm::parse_resource_id(var.virtual_network_id).resource_group_name, "")
 }

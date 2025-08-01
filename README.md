@@ -196,7 +196,7 @@ module "private_dns_resolver" {
 | Name | Source | Version |
 |------|--------|---------|
 | subnets | claranet/subnet/azurerm | ~> 8.1.0 |
-| vnet | claranet/vnet/azurerm | ~> 8.0.0 |
+| vnet | claranet/vnet/azurerm | ~> 8.1.0 |
 
 ## Resources
 

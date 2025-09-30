@@ -188,7 +188,7 @@ module "private_dns_resolver" {
 
 | Name | Version |
 |------|---------|
-| azurecaf | ~> 1.2.28 |
+| azurecaf | >= 1.2.28 |
 | azurerm | ~> 4.31 |
 
 ## Modules

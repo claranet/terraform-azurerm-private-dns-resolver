@@ -187,21 +187,21 @@ module "private_dns_resolver" {
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | azurecaf | >= 1.2.28 |
 | azurerm | ~> 4.31 |
 
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | subnets | claranet/subnet/azurerm | ~> 8.1.0 |
 | vnet | claranet/vnet/azurerm | ~> 8.1.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [azurerm_private_dns_resolver.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) | resource |
 | [azurerm_private_dns_resolver_dns_forwarding_ruleset.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) | resource |
 | [azurerm_private_dns_resolver_forwarding_rule.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) | resource |
@@ -217,7 +217,7 @@ module "private_dns_resolver" {
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
 | custom\_name | Custom Private DNS Resolver name, generated if not set. | `string` | `""` | no |
 | default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
@@ -239,7 +239,7 @@ module "private_dns_resolver" {
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | dns\_forwarding\_rulesets | Maps of Private DNS Resolver DNS forwarding rulesets. |
 | id | Private DNS Resolver ID. |
 | inbound\_endpoints | Maps of Private DNS Resolver inbound endpoints. |

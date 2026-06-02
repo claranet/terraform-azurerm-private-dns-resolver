@@ -1,31 +1,37 @@
 output "resource" {
   description = "Private DNS Resolver resource object."
   value       = azurerm_private_dns_resolver.main
+  sensitive   = true
 }
 
 output "resource_inbound_endpoint" {
   description = "Private DNS Resolver inbound endpoint resource object."
   value       = azurerm_private_dns_resolver_inbound_endpoint.main
+  sensitive   = true
 }
 
 output "resource_outbound_endpoint" {
   description = "Private DNS Resolver outbound endpoint resource object."
   value       = azurerm_private_dns_resolver_outbound_endpoint.main
+  sensitive   = true
 }
 
 output "resource_dns_forwarding_ruleset" {
   description = "Private DNS Resolver DNS forwarding ruleset resource object."
   value       = azurerm_private_dns_resolver_dns_forwarding_ruleset.main
+  sensitive   = true
 }
 
 output "resource_forwarding_rule" {
   description = "Private DNS Resolver forwarding rule resource object."
   value       = azurerm_private_dns_resolver_forwarding_rule.main
+  sensitive   = true
 }
 
 output "resource_virtual_network_link" {
   description = "Private DNS Resolver Virtual Network Link resource object."
   value       = azurerm_private_dns_resolver_virtual_network_link.main
+  sensitive   = true
 }
 
 output "module_virtual_network" {

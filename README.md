@@ -189,15 +189,15 @@ module "private_dns_resolver" {
 
 | Name | Version |
 | ---- | ------- |
-| azurecaf | >= 1.2.28 |
-| azurerm | ~> 4.31 |
+| azurecaf | ~> 1.3.0 |
+| azurerm | ~> 5.0 |
 
 ## Modules
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| subnets | claranet/subnet/azurerm | ~> 8.1.0 |
-| vnet | claranet/vnet/azurerm | ~> 8.1.0 |
+| subnets | claranet/subnet/azurerm | ~> 9.0 |
+| vnet | claranet/vnet/azurerm | ~> 9.0 |
 
 ## Resources
 

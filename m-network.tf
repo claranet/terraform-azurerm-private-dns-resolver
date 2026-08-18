@@ -1,6 +1,6 @@
 module "vnet" {
   source  = "claranet/vnet/azurerm"
-  version = "~> 8.1.0"
+  version = "~> 9.0"
 
   count = var.virtual_network_id == "" ? 1 : 0
 
@@ -25,7 +25,7 @@ module "vnet" {
 
 module "subnets" {
   source  = "claranet/subnet/azurerm"
-  version = "~> 8.1.0"
+  version = "~> 9.0"
 
   for_each = local.endpoints
 
